@@ -4,12 +4,10 @@ import time
 import os
 from dotenv import load_dotenv
 
-# Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
 
-# Environment variables
 AUTH_URL = os.getenv("AUTH_URL")
 NUMBER_TYPE_URLS = {
     "p": os.getenv("PRIME_URL"),
@@ -26,13 +24,11 @@ AUTH_PAYLOAD = {
     "clientSecret": os.getenv("CLIENT_SECRET")
 }
 
-# Globals
 access_token = None
 token_expiry = 0
 number_window = []
 window_size = 10
 
-# Function to refresh the token
 def refresh_token():
     global access_token
     global token_expiry
@@ -54,7 +50,6 @@ def refresh_token():
         print("Error during token refresh:", str(err))
         access_token = None
 
-# Function to get numbers
 def get_numbers_from_server(number_type):
     if number_type not in NUMBER_TYPE_URLS:
         print("Invalid type:", number_type)
@@ -87,7 +82,6 @@ def get_numbers_from_server(number_type):
         print("Exception in fetching:", str(ex))
         return []
 
-# Route to calculate average
 @app.route("/numbers/<number_type>", methods=["GET"])
 def calculate_average(number_type):
     global number_window
@@ -115,6 +109,5 @@ def calculate_average(number_type):
         "avg": avg
     })
 
-# Run the app
 if __name__ == "__main__":
     app.run(port=9876)
